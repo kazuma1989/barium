@@ -1,0 +1,336 @@
+{
+  "state": {
+    "player": 1,
+    "board": [
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 2,
+        "type": 5
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 2,
+        "type": 3
+      },
+      {
+        "owner": 2,
+        "type": 6
+      },
+      {
+        "owner": 2,
+        "type": 5
+      },
+      {
+        "owner": 2,
+        "type": 3
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 1,
+        "type": 5
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": 0,
+        "type": 0
+      },
+      {
+        "owner": 1,
+        "type": 3
+      },
+      {
+        "owner": 1,
+        "type": 6
+      },
+      {
+        "owner": 1,
+        "type": 5
+      },
+      {
+        "owner": 1,
+        "type": 3
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      },
+      {
+        "owner": -1,
+        "type": -1
+      }
+    ],
+    "capturedPieces": [],
+    "enemyCapturedPieces": [
+      {
+        "owner": 2,
+        "type": 1
+      },
+      {
+        "owner": 2,
+        "type": 1
+      },
+      {
+        "owner": 2,
+        "type": 1
+      },
+      {
+        "owner": 2,
+        "type": 1
+      },
+      {
+        "owner": 2,
+        "type": 1
+      },
+      {
+        "owner": 2,
+        "type": 1
+      }
+    ],
+    "winner": null
+  },
+  "legalMoves": [
+    {
+      "fromBoard": 36,
+      "fromCaptured": null,
+      "to": 29
+    },
+    {
+      "fromBoard": 36,
+      "fromCaptured": null,
+      "to": 30
+    },
+    {
+      "fromBoard": 36,
+      "fromCaptured": null,
+      "to": 37
+    },
+    {
+      "fromBoard": 36,
+      "fromCaptured": null,
+      "to": 43
+    },
+    {
+      "fromBoard": 44,
+      "fromCaptured": null,
+      "to": 37
+    },
+    {
+      "fromBoard": 44,
+      "fromCaptured": null,
+      "to": 38
+    },
+    {
+      "fromBoard": 45,
+      "fromCaptured": null,
+      "to": 37
+    },
+    {
+      "fromBoard": 45,
+      "fromCaptured": null,
+      "to": 38
+    },
+    {
+      "fromBoard": 45,
+      "fromCaptured": null,
+      "to": 39
+    },
+    {
+      "fromBoard": 46,
+      "fromCaptured": null,
+      "to": 38
+    },
+    {
+      "fromBoard": 46,
+      "fromCaptured": null,
+      "to": 39
+    },
+    {
+      "fromBoard": 46,
+      "fromCaptured": null,
+      "to": 40
+    },
+    {
+      "fromBoard": 47,
+      "fromCaptured": null,
+      "to": 39
+    },
+    {
+      "fromBoard": 47,
+      "fromCaptured": null,
+      "to": 40
+    }
+  ],
+  "lastMove": {
+    "fromBoard": 19,
+    "fromCaptured": null,
+    "to": 18
+  }
+}

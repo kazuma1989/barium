@@ -1,0 +1,157 @@
+openapi: 3.0.0
+info:
+  title: ごろごろどうぶつしょうぎ
+  version: v1
+paths:
+  /:
+    post:
+      summary: 指したい手を伝える
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Move'
+            examples:
+              fromBoard:
+                summary: 盤面の駒を動かすとき
+                value:
+                  fromBoard: 30
+                  to: 23
+              fromCaptured:
+                summary: 手駒を使うとき
+                value:
+                  fromCaptured: 1
+                  to: 23
+      responses:
+        '200':
+          description: 対戦相手が指した後の盤面
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+components:
+  schemas:
+    Message:
+      title: ゲームサーバーからのメッセージ
+      properties:
+        state:
+          $ref: '#/components/schemas/State'
+        legalMoves:
+          title: 指せる手一覧
+          type: array
+          items:
+            $ref: '#/components/schemas/Move'
+          example:
+            - fromBoard: 30
+              to: 23
+            - fromCaptured: 0
+              to: 23
+        lastMove:
+          title: 敵が指した手
+          $ref: '#/components/schemas/Move'
+    State:
+      title: 局面
+      properties:
+        player:
+          title: プレイヤー
+          type: integer
+          example: 1
+        board:
+          title: 盤面上の駒一覧
+          type: array
+          items:
+            $ref: '#/components/schemas/Piece'
+          example:
+            - owner: -1
+              type: -1
+            - owner: 0
+              type: 0
+            - owner: 1
+              type: 6
+        capturedPieces:
+          title: 手駒一覧
+          description: |
+            ひよこ→ねこ→いぬの順でソートされている。
+            手駒に「ひよこ」を2つ、「ねこ」を1つ持っている場合は、駒を取った順に関係なく、必ず「ひよこ、ひよこ、ねこ」となる
+          type: array
+          items:
+            $ref: '#/components/schemas/Piece'
+          example: []
+        enemyCapturedPieces:
+          title: 敵の手駒一覧
+          type: array
+          items:
+            $ref: '#/components/schemas/Piece'
+          example:
+            - owner: 2
+              type: 1
+            - owner: 2
+              type: 1
+            - owner: 2
+              type: 3
+        winner:
+          title: 勝者
+          $ref: '#/components/schemas/Player'
+    Player:
+      title: プレイヤー
+      description: |
+        * 1 - 先手
+        * 2 - 後手
+        * 0 - マスに駒がないとき
+        * -1 - 盤の外の駒
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 0
+        - -1
+    Piece:
+      title: 駒
+      properties:
+        owner:
+          $ref: '#/components/schemas/Player'
+        type:
+          title: 駒の種類
+          description: |
+            * 1 - ひよこ
+            * 2 - にわとり
+            * 3 - ねこ
+            * 4 - パワーアップねこ
+            * 5 - いぬ
+            * 6 - らいおん
+            * 0 - マスに駒がないとき
+            * -1 - 盤の外の駒
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 0
+            - -1
+      required:
+        - owner
+        - type
+    Move:
+      title: 手
+      properties:
+        fromBoard:
+          title: 移動元のマスの番号
+          type: integer
+        fromCaptured:
+          title: 手駒のインデックス
+          description: |
+            最初の手駒を0とした場合のインデックス
+          type: integer
+        to:
+          title: 移動先のマスの番号
+          type: integer
+      required:
+        - to
+      example:
+        fromBoard: 30
+        to: 23
