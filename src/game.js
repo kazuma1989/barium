@@ -35,7 +35,9 @@ export const PieceType = {
   cat:        3,
   powerUpCat: 4,
   dog:        5,
-  lion:       6
+  lion:       6,
+  vacant:     0,
+  wall:      -1,
 };
 
 // 駒。
