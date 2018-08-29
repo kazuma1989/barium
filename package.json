@@ -24,18 +24,22 @@
     ]
   },
   "scripts": {
+    "start": "concurrently \"npm:server\" \"sleep 1 && npm run sample\" \"sleep 3 && npm run sample2\"",
+    "start-r": "concurrently \"npm:server\" \"sleep 1 && npm run sample2\" \"sleep 3 && npm run sample\"",
     "test": "mocha --require babel-register test/**/*.js",
     "server": "node -r babel-register src/server.js",
     "sample": "node -r babel-register src/sample.js",
+    "sample2": "node -r babel-register src/sample2.js",
     "webpack": "webpack"
   },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
     "babel-plugin-lajure": "^0.0.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
+    "concurrently": "^4.0.0",
     "createjs": "^1.0.1",
     "exports-loader": "^0.7.0",
     "imports-loader": "^0.8.0",
