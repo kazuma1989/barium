@@ -1,5 +1,5 @@
 import { reduce, reduced } from 'lajure';
-import { PieceType, State, vacant, wall, Player, Piece } from './game';
+import { PieceType, State, vacant, wall, Player, Piece, getMoveDirections, getNextPlayer } from './game';
 
 // 点数計算のために駒のタイプを拡張する
 Object.assign(PieceType, {
@@ -22,10 +22,13 @@ const rule = new Map([
   [PieceType.caughtLion, MAX_POINT],
 ]);
 
+let start;
+let timeOver;
+
 // 状態を評価します。
 function evaluate(state) {
   const pointForBoard = state.board.reduce((acc, piece, index, board) => {
-    if (piece.type === PieceType.wall || piece.type === PieceType.vacant) {
+    if (piece === wall || piece === vacant) {
       return acc + 0;
     }
 
@@ -46,17 +49,28 @@ function evaluate(state) {
         type = piece.type;
     }
 
+    const frontTwo = state.player === Player.white ? index + 14 : index - 14;
+    const frontOne = state.player === Player.white ? index + 7 : index - 7;
     let bibiri = 1.0;
-    // if (state.player === Player.white) {
-    //   if (piece.owner === Player.white && board[index + 14]) {
-    //     bibiri = board[index + 14].owner === Player.black ? 1.5 : 1.0;
-    //   }
-    // }
-    // if (state.player === Player.black) {
-    //   if (piece.owner === Player.black && board[index - 14]) {
-    //     bibiri = board[index - 14].owner === Player.white ? 1.5 : 1.0;
-    //   }
-    // }
+
+    const nextPlayer = getNextPlayer(state.player);
+    // ライオン以外ではびびりに行かせる
+    if (board[frontTwo] && piece.owner === state.player && piece.type !== PieceType.lion) {
+      // 二歩前が敵、一歩前が自分の駒だったら
+      bibiri = (board[frontTwo].owner === nextPlayer && board[frontOne].owner === state.player) ? 1.2 :
+        // 一歩前が空のとき
+        (board[frontTwo].owner === nextPlayer && board[frontOne].type === vacant) ? 1.1 : 0;
+    }
+
+    if (piece.owner === state.player) {
+      const kiki = getMoveDirections(piece);
+      for (var i = 0; i < kiki.length; i++) {
+        if (board[index + kiki[i]].owner === nextPlayer) {
+          bibiri = bibiri * 1.1;
+        }
+        break;
+      }
+    }
 
     return acc + rule.get(type) * bibiri * player;
   }, 0);
@@ -104,6 +118,17 @@ function getScore(state, depth, alpha, beta) {
   const hashcode = state.hashcode();
   const memo = memos.get(hashcode);
 
+  // タイムオーバーをチェックして超えてたらtimeOverにする。
+  if (new Date().getTime() - start > 14000) {
+    timeOver = true;
+  }
+
+  //timeOverだったら無条件に0点を返す
+  if (timeOver) {
+    return 0;
+  }
+
+  //タイムオーバーじゃなかったらもっと深いところを計算する
   // 過去に同じ盤面のスコアを計算していた場合は、その値をそのまま返します。ハッシュ値がたまたま等しい異なる状態の場合は不正な動作になりますけど、気にしない方向で。HashMap欲しいなぁ……。
   if (memo && memo.depth >= depth && memo.alpha <= alpha && memo.beta >= beta) {
     return memo.score;
@@ -111,7 +136,12 @@ function getScore(state, depth, alpha, beta) {
 
   // 勝者が確定している場合は、探索を止めて大きな値を返します。
   if (state.winner) {
-    return state.winner === state.player ? MAX_POINT : -MAX_POINT;
+    if (depth === 4) {
+      return state.winner === state.player ? MAX_POINT : -MAX_POINT;
+    }
+    else {
+      return state.winner === state.player ? 100000 : -100000;
+    }
   }
 
   // 指定した深さまで探索した場合は、盤面を評価してスコアとします。
@@ -124,6 +154,7 @@ function getScore(state, depth, alpha, beta) {
     const score = -getScore(state.doMove(move), depth - 1, -beta, -acc);
     const nextAcc = score > acc ? score : acc;
 
+    //const nextAcc = score > acc ? score : (score < acc ? acc : (Math.random() * 2 < 1.0 ? score: acc));
     return nextAcc >= beta ? reduced(nextAcc) : nextAcc;
   }, alpha, state.getLegalMoves());
 
@@ -137,9 +168,18 @@ function getScore(state, depth, alpha, beta) {
 // 次の手を取得します。
 // 手を返せるように、スコアと手の配列をaccにするアルファ・ベータ法（正しくはネガ・アルファ法）を実行します。getScoreを手も扱うように改造すればコードの重複がなくなるのですけど、配列の生成は遅そうなので、敢えてこんなコードにしてみました。
 export function getMove(state) {
+  start = new Date().getTime();
+  timeOver = false;
+
   const [score, move] = reduce((acc, move) => {
     const score = -getScore(state.doMove(move), 4, -MAX_POINT, -acc[0]);  // 5手読むとすげー遅かったので、読む深さは4手で。
-    const nextAcc = score > acc[0] ? [score, move] : acc;  // TODO: スコアが同じ場合にランダムで入れ替えると、手に幅がでて良いかも。
+    let nextAcc;
+    if (state.capturedPieces.length > 3) {
+      nextAcc = score > acc[0] ? [score, move] : (score < acc[0] ? acc : Math.random() * 2 < 1.0 ? [score, move] : acc);
+    }
+    else {
+      nextAcc = score > acc[0] ? [score, move] : acc;  // TODO: スコアが同じ場合にランダムで入れ替えると、手に幅がでて良いかも。
+    }
 
     return nextAcc;
   }, [-MAX_POINT, null], state.getLegalMoves());  // TODO: 合法手が全く無い場合にnullが返るけど、大丈夫？　合法手が全くない状態が想像できないけど……。
